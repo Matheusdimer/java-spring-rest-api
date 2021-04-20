@@ -1,12 +1,12 @@
 package com.betha.cursomc.resources;
 
 import com.betha.cursomc.domain.Categoria;
+import com.betha.cursomc.domain.CategoriaView;
 import com.betha.cursomc.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,8 +17,8 @@ public class CategoriaResource {
     CategoriaService service;
 
     @GetMapping
-    public List<Categoria> listAll() {
-        return service.getCategorias();
+    public List<CategoriaView> listAll() {
+        return service.getAll();
     }
 
     @GetMapping("/{id}")
@@ -49,7 +49,7 @@ public class CategoriaResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Categoria> removeCategoria(@PathVariable Integer id) {
-        Categoria categoria = service.delete(id);
+        Categoria categoria = service.deleteCategoria(id);
 
         if (categoria != null) {
             return ResponseEntity.ok(categoria);
