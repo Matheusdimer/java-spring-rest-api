@@ -1,7 +1,6 @@
 package com.betha.cursomc.resources;
 
 import com.betha.cursomc.domain.Categoria;
-import com.betha.cursomc.domain.CategoriaView;
 import com.betha.cursomc.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,7 @@ public class CategoriaResource {
     CategoriaService service;
 
     @GetMapping
-    public List<CategoriaView> listAll() {
+    public List<Categoria> listAll() {
         return service.getAll();
     }
 

@@ -1,7 +1,6 @@
 package com.betha.cursomc.services;
 
 import com.betha.cursomc.domain.Categoria;
-import com.betha.cursomc.domain.CategoriaView;
 import com.betha.cursomc.repositories.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +17,14 @@ public class CategoriaService {
     @Autowired
     private EntityManager entityManager;
 
-    public List<CategoriaView> getAll() {
+    public List<Categoria> getAll() {
+        /*
         return entityManager
                 .createNamedQuery("Categoria.findAllView", CategoriaView.class)
                 .getResultList();
+
+         */
+        return repository.findAll();
     }
 
     public Optional<Categoria> getCategoria(Integer id) {
