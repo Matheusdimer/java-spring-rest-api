@@ -1,12 +1,15 @@
 package com.betha.cursomc.services;
 
-import com.betha.cursomc.domain.Categoria;
 import com.betha.cursomc.domain.Produto;
 import com.betha.cursomc.repositories.CategoriaRepository;
 import com.betha.cursomc.repositories.ProdutoRepository;
+import com.betha.cursomc.services.exceptions.ObjectNotFoundException;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,11 +27,8 @@ public class ProdutoService {
     public Produto getProduto(Integer id) {
         Optional<Produto> produto = produtoRepository.findById(id);
 
-        if (produto.isPresent()) {
-            return produto.get();
-        } else {
-            return null;
-        }
+        return produto.orElseThrow(() -> new ObjectNotFoundException("Produto com id " + id +
+                " não encontrado."));
     }
 
     public Produto saveProduto(Produto produto) {
@@ -40,22 +40,23 @@ public class ProdutoService {
     public Produto editProduto(Integer id, Produto produto) {
         Optional<Produto> prod = produtoRepository.findById(id);
 
-        if (prod.isPresent()) {
-            produto.setId(id);
-            return produtoRepository.save(produto);
-        } else {
-            return null;
+        if (!prod.isPresent()) {
+            throw new ObjectNotFoundException("Produto com id " + id + " não encontrado.");
         }
+        produto.setId(id);
+        return produtoRepository.save(produto);
     }
 
     public Produto deleteProduto(Integer id) {
-        Optional<Produto> produto = produtoRepository.findById(id);
+        Optional<Produto> possivelProduto = produtoRepository.findById(id);
 
-        if (produto.isPresent()) {
-            produtoRepository.delete(produto.get());
-            return produto.get();
-        } else {
-            return null;
+        if (!possivelProduto.isPresent()) {
+            throw new ObjectNotFoundException("Produto com id " + id + " não encontrado.");
         }
+        Produto produto = possivelProduto.get();
+        produto.setCategorias(Collections.emptyList());
+
+        produtoRepository.delete(produto);
+        return produto;
     }
 }
