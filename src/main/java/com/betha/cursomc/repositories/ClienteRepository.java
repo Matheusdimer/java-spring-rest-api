@@ -1,10 +1,10 @@
 package com.betha.cursomc.repositories;
 
-import com.betha.cursomc.domain.Cidade;
+import com.betha.cursomc.domain.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CidadeRepository extends JpaRepository<Cidade, Integer> {
+public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 
 }

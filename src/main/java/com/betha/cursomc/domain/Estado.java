@@ -1,5 +1,6 @@
 package com.betha.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -15,7 +16,7 @@ public class Estado {
     private String nome;
     private String sigla;
 
-    @JsonManagedReference
+    @JsonBackReference
     @OneToMany(mappedBy = "estado")
     private List<Cidade> cidades = new ArrayList<>();
 

@@ -23,7 +23,7 @@ public class CategoriaService {
                 .createNamedQuery("Categoria.findAllView", CategoriaView.class)
                 .getResultList();
 
-         */
+        */
         return repository.findAll();
     }
 
