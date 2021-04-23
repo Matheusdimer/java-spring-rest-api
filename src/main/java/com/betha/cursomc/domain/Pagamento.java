@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Pagamento {
     @Id
     private Integer id;
-    private EstadoPagamento estadoPagamento;
+    private EstadoPagamento estadoPagamento = EstadoPagamento.PENDENTE;
 
     @OneToOne
     @JoinColumn(name = "pedido_id")
@@ -21,8 +21,7 @@ public class Pagamento {
 
     }
 
-    public Pagamento(EstadoPagamento estadoPagamento, Pedido pedido) {
-        this.estadoPagamento = estadoPagamento;
+    public Pagamento(Pedido pedido) {
         this.pedido = pedido;
     }
 
