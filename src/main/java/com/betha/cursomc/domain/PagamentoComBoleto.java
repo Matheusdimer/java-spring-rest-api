@@ -3,37 +3,37 @@ package com.betha.cursomc.domain;
 import com.betha.cursomc.domain.enums.EstadoPagamento;
 
 import javax.persistence.Entity;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
 public class PagamentoComBoleto extends Pagamento {
-    private Date dataVencimento;
-    private Date dataPagamento;
+    private LocalDate dataVencimento;
+    private LocalDate dataPagamento;
 
     public PagamentoComBoleto() {
 
     }
 
-    public PagamentoComBoleto(EstadoPagamento estadoPagamento, Pedido pedido,
-                              Date dataVencimento, Date dataPagamento) {
-        super(estadoPagamento, pedido);
+    public PagamentoComBoleto(Pedido pedido, LocalDate dataVencimento, LocalDate dataPagamento) {
+        super(pedido);
         this.dataVencimento = dataVencimento;
         this.dataPagamento = dataPagamento;
     }
 
-    public Date getDataVencimento() {
+    public LocalDate getDataVencimento() {
         return dataVencimento;
     }
 
-    public void setDataVencimento(Date dataVencimento) {
+    public void setDataVencimento(LocalDate dataVencimento) {
         this.dataVencimento = dataVencimento;
     }
 
-    public Date getDataPagamento() {
+    public LocalDate getDataPagamento() {
         return dataPagamento;
     }
 
-    public void setDataPagamento(Date dataPagamento) {
+    public void setDataPagamento(LocalDate dataPagamento) {
         this.dataPagamento = dataPagamento;
     }
 }

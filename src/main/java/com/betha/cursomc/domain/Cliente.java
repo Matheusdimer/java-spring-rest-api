@@ -1,7 +1,11 @@
 package com.betha.cursomc.domain;
 
 import com.betha.cursomc.domain.enums.TipoCliente;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.springframework.cglib.core.GeneratorStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -27,6 +31,7 @@ public class Cliente {
     @CollectionTable(name = "telefone")
     private Set<String> telefones = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos = new ArrayList<>();
     public Cliente() {

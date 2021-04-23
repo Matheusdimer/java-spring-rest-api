@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Pagamento {
+public abstract class Pagamento {
     @Id
     private Integer id;
     private EstadoPagamento estadoPagamento = EstadoPagamento.PENDENTE;
