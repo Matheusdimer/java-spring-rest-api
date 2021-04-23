@@ -36,7 +36,6 @@ public class ClienteService {
 
     public Cliente save(Cliente cliente) {
         cliente.setId(null);
-        cliente.setTipoCliente(cliente.getTipoCliente());
         return clienteRepository.save(cliente);
     }
 
@@ -48,7 +47,6 @@ public class ClienteService {
         }
 
         cliente.setId(id);
-        cliente.setTipoCliente(cliente.getTipoCliente());
         return clienteRepository.save(cliente);
     }
 
