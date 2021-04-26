@@ -48,8 +48,9 @@ public class ClienteResource {
     }
 
     @PostMapping("/{id}/enderecos")
-    public Endereco adicionarEndereco(@PathVariable(name = "id") Integer clienteId, @RequestBody Endereco endereco) {
-        return clienteService.addEndereco(clienteId, endereco);
+    public ResponseEntity<Endereco> adicionarEndereco(@PathVariable(name = "id") Integer clienteId, @RequestBody Endereco endereco) {
+        Endereco enderecoSalvo = clienteService.addEndereco(clienteId, endereco);
+        return ResponseEntity.created(URI.create("/enderecos/" + enderecoSalvo.getId())).body(enderecoSalvo);
     }
 
     @PutMapping("/{clienteId}/enderecos/{enderecoId}")

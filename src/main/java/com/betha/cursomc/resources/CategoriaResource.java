@@ -5,7 +5,9 @@ import com.betha.cursomc.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,39 +23,25 @@ public class CategoriaResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Categoria> listOne(@PathVariable Integer id) {
-        Optional<Categoria> categoria = service.getCategoria(id);
-        if (categoria.isPresent()) {
-            return ResponseEntity.ok(categoria.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public Categoria listOne(@PathVariable Integer id) {
+        return service.getCategoria(id);
     }
 
     @PostMapping
-    public Categoria addCategoria(@RequestBody Categoria categoria) {
-        return service.saveCategoria(categoria);
+    public ResponseEntity<Categoria> addCategoria(@RequestBody Categoria categoria) {
+        Categoria categoriaSalva = service.saveCategoria(categoria);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
+                .path("/{id}").buildAndExpand(categoriaSalva.getId()).toUri();
+        return ResponseEntity.created(uri).body(categoriaSalva);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Categoria> editCategoria(@PathVariable Integer id, @RequestBody Categoria categoria) {
-        categoria = service.editCategoria(id, categoria);
-
-        if (categoria != null) {
-            return ResponseEntity.ok(categoria);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public Categoria editCategoria(@PathVariable Integer id, @RequestBody Categoria categoria) {
+        return service.editCategoria(id, categoria);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Categoria> removeCategoria(@PathVariable Integer id) {
-        Categoria categoria = service.deleteCategoria(id);
-
-        if (categoria != null) {
-            return ResponseEntity.ok(categoria);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public Categoria removeCategoria(@PathVariable Integer id) {
+        return service.deleteCategoria(id);
     }
 }

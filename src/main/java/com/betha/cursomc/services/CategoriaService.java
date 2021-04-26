@@ -2,14 +2,20 @@ package com.betha.cursomc.services;
 
 import com.betha.cursomc.domain.Categoria;
 import com.betha.cursomc.repositories.CategoriaRepository;
+import com.betha.cursomc.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class CategoriaService {
     @Autowired
     private CategoriaRepository repository;
@@ -17,6 +23,7 @@ public class CategoriaService {
     @Autowired
     private EntityManager entityManager;
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     public List<Categoria> getAll() {
         /*
         return entityManager
@@ -27,8 +34,9 @@ public class CategoriaService {
         return repository.findAll();
     }
 
-    public Optional<Categoria> getCategoria(Integer id) {
-        return repository.findById(id);
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public Categoria getCategoria(Integer id) {
+        return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada"));
     }
 
     public Categoria saveCategoria(Categoria categoria) {
@@ -43,19 +51,18 @@ public class CategoriaService {
             categoria.setId(id);
             return repository.save(categoria);
         } else {
-            return null;
+            throw new ObjectNotFoundException("Categoria não encontrada");
         }
     }
 
     public Categoria deleteCategoria(Integer id) {
-        Optional<Categoria> categoria = repository.findById(id);
+        Categoria categoria = repository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada"));
 
-        if (categoria.isPresent()) {
-            repository.delete(categoria.get());
-            return categoria.get();
-        } else {
-            return null;
-        }
+        repository.delete(categoria);
+
+        categoria.setProdutos(Collections.emptyList());
+        return categoria;
     }
 
 }
