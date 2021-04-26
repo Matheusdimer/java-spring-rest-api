@@ -45,19 +45,14 @@ public class CategoriaService {
     }
 
     public Categoria editCategoria(Integer id, Categoria categoria) {
-        Optional<Categoria> cat = repository.findById(id);
+        Categoria cat = getCategoria(id);
 
-        if (cat.isPresent()) {
-            categoria.setId(id);
-            return repository.save(categoria);
-        } else {
-            throw new ObjectNotFoundException("Categoria não encontrada");
-        }
+        categoria.setId(id);
+        return repository.save(categoria);
     }
 
     public Categoria deleteCategoria(Integer id) {
-        Categoria categoria = repository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada"));
+        Categoria categoria = getCategoria(id);
 
         repository.delete(categoria);
 
