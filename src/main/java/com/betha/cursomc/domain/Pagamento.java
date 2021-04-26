@@ -1,6 +1,7 @@
 package com.betha.cursomc.domain;
 
 import com.betha.cursomc.domain.enums.EstadoPagamento;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -15,6 +16,7 @@ public abstract class Pagamento {
     @OneToOne
     @JoinColumn(name = "pedido_id")
     @MapsId
+    @JsonIgnore
     private Pedido pedido;
 
     public Pagamento() {

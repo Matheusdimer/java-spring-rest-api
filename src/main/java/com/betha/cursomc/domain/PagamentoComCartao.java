@@ -1,7 +1,5 @@
 package com.betha.cursomc.domain;
 
-import com.betha.cursomc.domain.enums.EstadoPagamento;
-
 import javax.persistence.Entity;
 
 @Entity

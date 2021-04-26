@@ -1,8 +1,17 @@
 package com.betha.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.GeneratorType;
+import org.springframework.cglib.core.GeneratorStrategy;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Pedido {
@@ -14,13 +23,17 @@ public class Pedido {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
     private Pagamento pagamento;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
     @ManyToOne
-    @JoinColumn(name = "enderedo_entrega_id")
+    @JoinColumn(name = "endereco_entrega_id")
     private Endereco enderecoEntrega;
+
+    @OneToMany(mappedBy = "id.pedido")
+    private Set<ItemPedido> itens = new HashSet<>();
 
     public Pedido() {
 
@@ -65,6 +78,14 @@ public class Pedido {
 
     public void setEnderecoEntrega(Endereco enderecoEntrega) {
         this.enderecoEntrega = enderecoEntrega;
+    }
+
+    public Set<ItemPedido> getItens() {
+        return itens;
+    }
+
+    public void setItens(Set<ItemPedido> itens) {
+        this.itens = itens;
     }
 
     @Override

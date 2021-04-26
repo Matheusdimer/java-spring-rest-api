@@ -7,23 +7,33 @@ import com.betha.cursomc.repositories.EnderecoRepository;
 import com.betha.cursomc.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class ClienteService {
+
+    @Autowired
+    EntityManager entityManager;
+
     @Autowired
     ClienteRepository clienteRepository;
 
     @Autowired
     EnderecoRepository enderecoRepository;
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     public List<Cliente> getAll() {
         return clienteRepository.findAll();
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     public Cliente getOne(Integer id) {
         Optional<Cliente> possivelCliente = clienteRepository.findById(id);
 
@@ -65,6 +75,7 @@ public class ClienteService {
         return cliente;
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     public List<Endereco> getEnderecos(Integer clienteId) {
         return enderecoRepository.findByClienteId(clienteId);
     }
@@ -83,7 +94,9 @@ public class ClienteService {
         cliente.getEnderecos().add(endereco);
         clienteRepository.save(cliente);
 
-        return enderecoRepository.save(endereco);
+        Endereco enderecoSalvo = enderecoRepository.save(endereco);
+        entityManager.refresh(enderecoSalvo);
+        return enderecoSalvo;
     }
 
     public Endereco editEndereco(Integer clienteId, Integer enderecoId, Endereco endereco) {
