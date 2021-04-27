@@ -5,6 +5,9 @@ import com.betha.cursomc.dto.CategoriaDTO;
 import com.betha.cursomc.repositories.CategoriaRepository;
 import com.betha.cursomc.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,10 +34,8 @@ public class CategoriaService {
 
         */
         List<Categoria> categorias = repository.findAll();
-        List<CategoriaDTO> lista = categorias.stream()
-                .map(categoria -> new CategoriaDTO(categoria)).collect(Collectors.toList());
 
-        return lista;
+        return categorias.stream().map(CategoriaDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
@@ -63,4 +64,8 @@ public class CategoriaService {
         return categoria;
     }
 
+    public Page<Categoria> findPerPages(Integer page, Integer linesPerPage, String orderBy, String direction) {
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        return repository.findAll(pageRequest);
+    }
 }

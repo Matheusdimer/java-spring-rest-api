@@ -4,6 +4,9 @@ import com.betha.cursomc.domain.Categoria;
 import com.betha.cursomc.dto.CategoriaDTO;
 import com.betha.cursomc.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -21,6 +24,16 @@ public class CategoriaResource {
     @GetMapping
     public List<CategoriaDTO> listAll() {
         return service.getAll();
+    }
+
+    @GetMapping("/page")
+    public Page<CategoriaDTO> findPage(
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "lines", defaultValue = "24") Integer linesPerPage,
+            @RequestParam(name = "orderby", defaultValue = "nome") String orderBy,
+            @RequestParam(name = "direction", defaultValue = "ASC") String direction) {
+        Page<Categoria> categorias = service.findPerPages(page, linesPerPage, orderBy, direction);
+        return categorias.map(CategoriaDTO::new);
     }
 
     @GetMapping("/{id}")
