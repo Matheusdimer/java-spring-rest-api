@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,9 @@ public class CategoriaService {
         */
         List<Categoria> categorias = repository.findAll();
 
-        return categorias.stream().map(CategoriaDTO::new).collect(Collectors.toList());
+        return categorias.stream()
+                .map(CategoriaDTO::new)
+                .collect(Collectors.toList());
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
