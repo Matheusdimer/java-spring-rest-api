@@ -1,10 +1,10 @@
 package com.betha.cursomc.services;
 
-import com.betha.cursomc.domain.Categoria;
+import com.betha.cursomc.domain.Cidade;
 import com.betha.cursomc.domain.Cliente;
 import com.betha.cursomc.domain.Endereco;
-import com.betha.cursomc.dto.CategoriaDTO;
 import com.betha.cursomc.dto.ClienteDTO;
+import com.betha.cursomc.dto.ClienteNewDTO;
 import com.betha.cursomc.repositories.ClienteRepository;
 import com.betha.cursomc.repositories.EnderecoRepository;
 import com.betha.cursomc.services.exceptions.ObjectNotFoundException;
@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,10 +41,17 @@ public class ClienteService {
 
     @Transactional(propagation = Propagation.SUPPORTS)
     public Cliente getOne(Integer id) {
-
         return clienteRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("Cliente id " + id + " não encontrado."));
     }
+
+    public Cliente add(ClienteNewDTO clienteDTO) {
+        Cliente cliente = this.fromDTO(clienteDTO);
+        enderecoRepository.saveAll(cliente.getEnderecos());
+
+        return clienteRepository.save(cliente);
+    }
+
 
     public Cliente save(Cliente cliente) {
         cliente.setId(null);
@@ -65,6 +71,8 @@ public class ClienteService {
 
         clienteRepository.delete(cliente);
         cliente.setEnderecos(Collections.emptyList());
+        cliente.setPedidos(Collections.emptyList());
+        cliente.setTelefones(Collections.emptySet());
 
         return cliente;
     }
@@ -121,6 +129,26 @@ public class ClienteService {
         cliente.setId(cli.getId());
         cliente.setNome(cli.getNome());
         cliente.setEmail(cli.getEmail());
+
+        return cliente;
+    }
+
+    public Cliente fromDTO(ClienteNewDTO cliDTO) {
+        Cliente cliente = new Cliente(cliDTO.getNome(), cliDTO.getEmail(), cliDTO.getCpf_cnpj(), cliDTO.getTipo());
+        Cidade cidade = new Cidade(cliDTO.getCidadeId(), null, null);
+        Endereco endereco = new Endereco(cliDTO.getLogradouro(), cliDTO.getNumero(),
+                cliDTO.getComplemento(), cliDTO.getBairro(), cliDTO.getCep(), cliente, cidade);
+
+        cliente.getEnderecos().add(endereco);
+        cliente.getTelefones().add(cliDTO.getTelefone1());
+
+        if (cliDTO.getTelefone2() != null) {
+            cliente.getTelefones().add(cliDTO.getTelefone2());
+        }
+
+        if (cliDTO.getTelefone3() != null) {
+            cliente.getTelefones().add(cliDTO.getTelefone3());
+        }
 
         return cliente;
     }

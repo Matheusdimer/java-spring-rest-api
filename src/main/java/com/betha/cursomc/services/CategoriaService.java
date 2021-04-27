@@ -13,7 +13,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,10 +49,11 @@ public class CategoriaService {
         return repository.save(categoria);
     }
 
-    public Categoria editCategoria(Integer id, Categoria categoria) {
-        Categoria cat = getCategoria(id);
+    public Categoria editCategoria(Integer id, Categoria cat) {
+        Categoria categoria = this.getCategoria(id);
 
         categoria.setId(id);
+        this.updateData(categoria, cat);
         return repository.save(categoria);
     }
 
@@ -71,5 +73,9 @@ public class CategoriaService {
 
     public Categoria fromDTO(CategoriaDTO cat) {
         return new Categoria(cat.getId(), cat.getNome());
+    }
+
+    private void updateData(Categoria newObj, Categoria obj) {
+        newObj.setNome(obj.getNome());
     }
 }

@@ -3,6 +3,7 @@ package com.betha.cursomc.resources;
 import com.betha.cursomc.domain.Cliente;
 import com.betha.cursomc.domain.Endereco;
 import com.betha.cursomc.dto.ClienteDTO;
+import com.betha.cursomc.dto.ClienteNewDTO;
 import com.betha.cursomc.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +29,8 @@ public class ClienteResource {
     }
 
     @PostMapping
-    public ResponseEntity<Cliente> addCliente(@RequestBody Cliente cliente) {
-        cliente = clienteService.save(cliente);
+    public ResponseEntity<Cliente> addCliente(@RequestBody ClienteNewDTO clienteNovo) {
+        Cliente cliente = clienteService.add(clienteNovo);
         return ResponseEntity.created(URI.create("/clientes/"+ cliente.getId())).body(cliente);
     }
 
