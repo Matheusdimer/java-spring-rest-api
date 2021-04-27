@@ -1,15 +1,15 @@
-package com.betha.cursomc.domain;
+package com.betha.cursomc.dto;
 
-public class NovoPedido {
+public class PedidoDTO {
     private Integer cliente;
     private Integer enderecoId;
     private Integer pagamento;
     private Integer parcelas;
 
-    public NovoPedido() {
+    public PedidoDTO() {
     }
 
-    public NovoPedido(Integer cliente, Integer enderecoId, Integer pagamento) {
+    public PedidoDTO(Integer cliente, Integer enderecoId, Integer pagamento) {
         this.cliente = cliente;
         this.enderecoId = enderecoId;
         this.pagamento = pagamento;

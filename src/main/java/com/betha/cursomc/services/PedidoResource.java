@@ -1,6 +1,6 @@
 package com.betha.cursomc.services;
 
-import com.betha.cursomc.domain.NovoPedido;
+import com.betha.cursomc.dto.PedidoDTO;
 import com.betha.cursomc.domain.Pedido;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +24,7 @@ public class PedidoResource {
     }
 
     @PostMapping
-    public Pedido addPedido(@RequestBody NovoPedido pedido) {
+    public Pedido addPedido(@RequestBody PedidoDTO pedido) {
         return pedidoService.add(pedido);
     }
 

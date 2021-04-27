@@ -1,6 +1,7 @@
 package com.betha.cursomc.services;
 
 import com.betha.cursomc.domain.*;
+import com.betha.cursomc.dto.PedidoDTO;
 import com.betha.cursomc.repositories.ClienteRepository;
 import com.betha.cursomc.repositories.PedidoRepository;
 import com.betha.cursomc.services.exceptions.ObjectNotFoundException;
@@ -27,14 +28,14 @@ public class PedidoService {
                 .orElseThrow(() -> new ObjectNotFoundException("Pedido id " + id + " não encontrado"));
     }
 
-    public Pedido add(NovoPedido novoPedido) {
-        Integer clienteId = novoPedido.getCliente();
+    public Pedido add(PedidoDTO pedidoDTO) {
+        Integer clienteId = pedidoDTO.getCliente();
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new ObjectNotFoundException("Cliente id " + clienteId + " não encontrado"));
 
         Endereco endereco = null;
         for (Endereco end : cliente.getEnderecos()) {
-            if (end.getId() == novoPedido.getEnderecoId()) {
+            if (end.getId() == pedidoDTO.getEnderecoId()) {
                 endereco = end;
             }
         };
@@ -44,10 +45,10 @@ public class PedidoService {
         Pedido pedido = new Pedido(cliente, endereco);
         Pagamento pagamento = null;
 
-        if (novoPedido.getPagamento() == 1) {
+        if (pedidoDTO.getPagamento() == 1) {
             pagamento = new PagamentoComBoleto(pedido, LocalDate.now(), LocalDate.now());
-        } else if (novoPedido.getPagamento() == 2) {
-            pagamento = new PagamentoComCartao(pedido, novoPedido.getParcelas());
+        } else if (pedidoDTO.getPagamento() == 2) {
+            pagamento = new PagamentoComCartao(pedido, pedidoDTO.getParcelas());
         }
 
         pedido.setPagamento(pagamento);

@@ -1,6 +1,7 @@
 package com.betha.cursomc.services;
 
 import com.betha.cursomc.domain.Categoria;
+import com.betha.cursomc.dto.CategoriaDTO;
 import com.betha.cursomc.repositories.CategoriaRepository;
 import com.betha.cursomc.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -24,14 +23,18 @@ public class CategoriaService {
     private EntityManager entityManager;
 
     @Transactional(propagation = Propagation.SUPPORTS)
-    public List<Categoria> getAll() {
+    public List<CategoriaDTO> getAll() {
         /*
         return entityManager
                 .createNamedQuery("Categoria.findAllView", CategoriaView.class)
                 .getResultList();
 
         */
-        return repository.findAll();
+        List<Categoria> categorias = repository.findAll();
+        List<CategoriaDTO> lista = categorias.stream()
+                .map(categoria -> new CategoriaDTO(categoria)).collect(Collectors.toList());
+
+        return lista;
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
