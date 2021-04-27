@@ -1,11 +1,17 @@
 package com.betha.cursomc.services;
 
+import com.betha.cursomc.domain.Categoria;
 import com.betha.cursomc.domain.Cliente;
 import com.betha.cursomc.domain.Endereco;
+import com.betha.cursomc.dto.CategoriaDTO;
+import com.betha.cursomc.dto.ClienteDTO;
 import com.betha.cursomc.repositories.ClienteRepository;
 import com.betha.cursomc.repositories.EnderecoRepository;
 import com.betha.cursomc.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +20,7 @@ import javax.persistence.EntityManager;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -29,19 +36,15 @@ public class ClienteService {
     EnderecoRepository enderecoRepository;
 
     @Transactional(propagation = Propagation.SUPPORTS)
-    public List<Cliente> getAll() {
-        return clienteRepository.findAll();
+    public List<ClienteDTO> getAll() {
+        return clienteRepository.findAll().stream().map(ClienteDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
     public Cliente getOne(Integer id) {
-        Optional<Cliente> possivelCliente = clienteRepository.findById(id);
 
-        if (!possivelCliente.isPresent()) {
-            throw new ObjectNotFoundException("Cliente id " + id + " não encontrado.");
-        }
-
-        return possivelCliente.get();
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("Cliente id " + id + " não encontrado."));
     }
 
     public Cliente save(Cliente cliente) {
@@ -49,25 +52,16 @@ public class ClienteService {
         return clienteRepository.save(cliente);
     }
 
-    public Cliente edit(Integer id, Cliente cliente) {
-        Optional<Cliente> possivelCliente = clienteRepository.findById(id);
-
-        if (!possivelCliente.isPresent()) {
-            throw new ObjectNotFoundException("Cliente id " + id + " não encontrado.");
-        }
+    public Cliente edit(Integer id, Cliente cli) {
+        Cliente cliente = this.getOne(id);
 
         cliente.setId(id);
+        this.updateData(cliente, cli);
         return clienteRepository.save(cliente);
     }
 
     public Cliente delete(Integer id) {
-        Optional<Cliente> possivelCliente = clienteRepository.findById(id);
-
-        if (!possivelCliente.isPresent()) {
-            throw new ObjectNotFoundException("Cliente id " + id + " não encontrado.");
-        }
-
-        Cliente cliente = possivelCliente.get();
+        Cliente cliente = this.getOne(id);
 
         clienteRepository.delete(cliente);
         cliente.setEnderecos(Collections.emptyList());
@@ -81,13 +75,7 @@ public class ClienteService {
     }
 
     public Endereco addEndereco(Integer clienteId, Endereco endereco) {
-        Optional<Cliente> possivelCliente = clienteRepository.findById(clienteId);
-
-        if (!possivelCliente.isPresent()) {
-            throw new ObjectNotFoundException("Cliente id " + clienteId + " não encontrado.");
-        }
-
-        Cliente cliente = possivelCliente.get();
+        Cliente cliente = this.getOne(clienteId);
 
         endereco.setCliente(cliente);
 
@@ -100,18 +88,9 @@ public class ClienteService {
     }
 
     public Endereco editEndereco(Integer clienteId, Integer enderecoId, Endereco endereco) {
-        Optional<Cliente> possivelCliente = clienteRepository.findById(clienteId);
-        Optional<Endereco> possivelEndereco = enderecoRepository.findById(enderecoId);
-
-        if (!possivelCliente.isPresent()) {
-            throw new ObjectNotFoundException("Cliente id " + clienteId + " não encontrado.");
-        }
-        if (!possivelEndereco.isPresent()) {
-            throw new ObjectNotFoundException("Endereco relacionado ao cliente id "
-                    + clienteId + " não encontrado.");
-        }
-
-        Cliente cliente = possivelCliente.get();
+        Cliente cliente = this.getOne(clienteId);
+        Endereco enderecoSalvo = enderecoRepository.findById(enderecoId)
+                .orElseThrow(() -> new ObjectNotFoundException("Endereco relacionado ao cliente id " + clienteId + " não encontrado."));
 
         endereco.setId(enderecoId);
         endereco.setCliente(cliente);
@@ -120,19 +99,9 @@ public class ClienteService {
     }
 
     public Endereco removeEndereco(Integer clienteId, Integer enderecoId) {
-        Optional<Cliente> possivelCliente = clienteRepository.findById(clienteId);
-        Optional<Endereco> possivelEndereco = enderecoRepository.findById(enderecoId);
-
-        if (!possivelCliente.isPresent()) {
-            throw new ObjectNotFoundException("Cliente id " + clienteId + " não encontrado.");
-        }
-        if (!possivelEndereco.isPresent()) {
-            throw new ObjectNotFoundException("Endereco relacionado ao cliente id "
-                    + clienteId + " não encontrado.");
-        }
-
-        Cliente cliente = possivelCliente.get();
-        Endereco endereco = possivelEndereco.get();
+        Cliente cliente = this.getOne(clienteId);
+        Endereco endereco = enderecoRepository.findById(enderecoId)
+                .orElseThrow(() -> new ObjectNotFoundException("Endereco relacionado ao cliente id " + clienteId + " não encontrado."));
 
         cliente.getEnderecos().remove(endereco);
         clienteRepository.save(cliente);
@@ -140,5 +109,24 @@ public class ClienteService {
         enderecoRepository.delete(endereco);
         endereco.setCliente(null);
         return endereco;
+    }
+
+    public Page<Cliente> findPerPages(Integer page, Integer linesPerPage, String orderBy, String direction) {
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        return clienteRepository.findAll(pageRequest);
+    }
+
+    public Cliente fromDTO(ClienteDTO cli) {
+        Cliente cliente = new Cliente();
+        cliente.setId(cli.getId());
+        cliente.setNome(cli.getNome());
+        cliente.setEmail(cli.getEmail());
+
+        return cliente;
+    }
+
+    private void updateData(Cliente newObj, Cliente obj) {
+        newObj.setNome(obj.getNome());
+        newObj.setEmail(obj.getEmail());
     }
 }

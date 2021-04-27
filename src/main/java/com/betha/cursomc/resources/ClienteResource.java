@@ -2,6 +2,7 @@ package com.betha.cursomc.resources;
 
 import com.betha.cursomc.domain.Cliente;
 import com.betha.cursomc.domain.Endereco;
+import com.betha.cursomc.dto.ClienteDTO;
 import com.betha.cursomc.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class ClienteResource {
     ClienteService clienteService;
 
     @GetMapping
-    public List<Cliente> getCidades() {
+    public List<ClienteDTO> getCidades() {
         return clienteService.getAll();
     }
 
@@ -33,7 +34,8 @@ public class ClienteResource {
     }
 
     @PutMapping("/{id}")
-    public Cliente editCliente(@PathVariable Integer id, @RequestBody Cliente cliente) {
+    public Cliente editCliente(@PathVariable Integer id, @RequestBody ClienteDTO clienteDTO) {
+        Cliente cliente = clienteService.fromDTO(clienteDTO);
         return clienteService.edit(id, cliente);
     }
 

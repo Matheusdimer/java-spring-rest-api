@@ -24,7 +24,7 @@ public class ResourceExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<StandardError> dataIntegrity(DataIntegrityViolationException e, HttpServletRequest request) {
         StandardError error = new StandardError(HttpStatus.BAD_REQUEST.value(),
-                e.getMessage(), System.currentTimeMillis());
+                "Não é possível excluir pois há entidades relacionadas", System.currentTimeMillis());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
