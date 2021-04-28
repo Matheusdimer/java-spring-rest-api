@@ -36,7 +36,7 @@ public class ClienteResource {
     }
 
     @PutMapping("/{id}")
-    public Cliente editCliente(@PathVariable Integer id, @RequestBody ClienteDTO clienteDTO) {
+    public Cliente editCliente(@PathVariable Integer id, @Valid @RequestBody ClienteDTO clienteDTO) {
         Cliente cliente = clienteService.fromDTO(clienteDTO);
         return clienteService.edit(id, cliente);
     }
