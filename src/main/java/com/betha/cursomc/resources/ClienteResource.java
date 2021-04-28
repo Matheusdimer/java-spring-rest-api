@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class ClienteResource {
     }
 
     @PostMapping
-    public ResponseEntity<Cliente> addCliente(@RequestBody ClienteNewDTO clienteNovo) {
+    public ResponseEntity<Cliente> addCliente(@Valid @RequestBody ClienteNewDTO clienteNovo) {
         Cliente cliente = clienteService.add(clienteNovo);
         return ResponseEntity.created(URI.create("/clientes/"+ cliente.getId())).body(cliente);
     }

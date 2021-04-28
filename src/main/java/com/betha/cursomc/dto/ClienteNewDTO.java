@@ -1,17 +1,37 @@
 package com.betha.cursomc.dto;
 
+import com.betha.cursomc.services.validation.ClienteInsert;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+@ClienteInsert
 public class ClienteNewDTO {
+
+    @NotEmpty
+    @Length(min = 5, max = 120)
     private String nome;
+
+    @NotEmpty
+    @Email
     private String email;
+
+    @NotEmpty
     private String cpf_cnpj;
     private Integer tipo;
 
+    @NotEmpty
     private String logradouro;
+    @NotEmpty
     private String numero;
     private String complemento;
+    @NotEmpty
     private String bairro;
+    @NotEmpty
     private String cep;
 
+    @NotEmpty
     private String telefone1;
     private String telefone2;
     private String telefone3;
