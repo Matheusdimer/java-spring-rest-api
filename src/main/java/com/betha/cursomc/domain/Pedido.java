@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GeneratorType;
 import org.springframework.cglib.core.GeneratorStrategy;
 
@@ -32,7 +33,7 @@ public class Pedido {
     @JoinColumn(name = "endereco_entrega_id")
     private Endereco enderecoEntrega;
 
-    @OneToMany(mappedBy = "id.pedido")
+    @OneToMany(mappedBy = "id.pedido", cascade = CascadeType.ALL)
     private Set<ItemPedido> itens = new HashSet<>();
 
     public Pedido() {
@@ -86,6 +87,15 @@ public class Pedido {
 
     public void setItens(Set<ItemPedido> itens) {
         this.itens = itens;
+    }
+
+    public Double getTotal() {
+        Double soma = 0.00;
+        for (ItemPedido item : getItens()) {
+            soma += item.getSubtotal();
+        }
+
+        return soma;
     }
 
     @Override

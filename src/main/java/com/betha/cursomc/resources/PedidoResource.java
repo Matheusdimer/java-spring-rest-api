@@ -4,6 +4,7 @@ import com.betha.cursomc.dto.PedidoDTO;
 import com.betha.cursomc.domain.Pedido;
 import com.betha.cursomc.services.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,7 +31,9 @@ public class PedidoResource {
     }
 
     @DeleteMapping("/{id}")
-    public Pedido removePedido(@PathVariable Integer id) {
-        return pedidoService.delete(id);
+    public ResponseEntity<Void> removePedido(@PathVariable Integer id) {
+        pedidoService.delete(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

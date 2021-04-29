@@ -1,18 +1,36 @@
 package com.betha.cursomc.dto;
 
+import javax.validation.constraints.NotNull;
+import java.util.List;
+
 public class PedidoDTO {
+    @NotNull
     private Integer cliente;
-    private Integer enderecoId;
+    @NotNull
+    private Integer endereco;
+    @NotNull
     private Integer pagamento;
     private Integer parcelas;
+
+    @NotNull
+    private List<ItemPedidoDTO> itens;
 
     public PedidoDTO() {
     }
 
-    public PedidoDTO(Integer cliente, Integer enderecoId, Integer pagamento) {
+    public PedidoDTO(Integer cliente, Integer endereco, Integer pagamento, List<ItemPedidoDTO> itens) {
         this.cliente = cliente;
-        this.enderecoId = enderecoId;
+        this.endereco = endereco;
         this.pagamento = pagamento;
+        this.itens = itens;
+    }
+
+    public List<ItemPedidoDTO> getItens() {
+        return itens;
+    }
+
+    public void setItens(List<ItemPedidoDTO> itens) {
+        this.itens = itens;
     }
 
     public Integer getCliente() {
@@ -23,12 +41,12 @@ public class PedidoDTO {
         this.cliente = cliente;
     }
 
-    public Integer getEnderecoId() {
-        return enderecoId;
+    public Integer getEndereco() {
+        return endereco;
     }
 
-    public void setEnderecoId(Integer enderecoId) {
-        this.enderecoId = enderecoId;
+    public void setEndereco(Integer endereco) {
+        this.endereco = endereco;
     }
 
     public Integer getPagamento() {
