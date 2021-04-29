@@ -14,10 +14,10 @@ import java.util.List;
 @Service
 public class PedidoService {
     @Autowired
-    PedidoRepository pedidoRepository;
+    private PedidoRepository pedidoRepository;
 
     @Autowired
-    ClienteRepository clienteRepository;
+    private ClienteRepository clienteRepository;
 
     public List<Pedido> getAll() {
         return pedidoRepository.findAll();
@@ -35,10 +35,10 @@ public class PedidoService {
 
         Endereco endereco = null;
         for (Endereco end : cliente.getEnderecos()) {
-            if (end.getId() == pedidoDTO.getEnderecoId()) {
+            if (end.getId().equals(pedidoDTO.getEnderecoId())) {
                 endereco = end;
             }
-        };
+        }
 
         if (endereco == null) throw new ObjectNotFoundException("Endereco não encontrado");
 

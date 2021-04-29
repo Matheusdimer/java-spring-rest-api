@@ -26,13 +26,13 @@ import java.util.stream.Collectors;
 public class ClienteService {
 
     @Autowired
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Autowired
-    ClienteRepository clienteRepository;
+    private ClienteRepository clienteRepository;
 
     @Autowired
-    EnderecoRepository enderecoRepository;
+    private EnderecoRepository enderecoRepository;
 
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<ClienteDTO> getAll() {

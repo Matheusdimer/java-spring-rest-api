@@ -2,6 +2,7 @@ package com.betha.cursomc.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.*;
@@ -15,7 +16,6 @@ public class Produto {
     private String nome;
     private Double preco;
 
-    @JsonIgnore
     @ManyToMany()
     @JoinTable(name = "PRODUTO_CATEGORIA",
             joinColumns = @JoinColumn(name = "produto_id"),

@@ -1,62 +1,75 @@
 package com.betha.cursomc.services;
 
+import com.betha.cursomc.domain.Categoria;
 import com.betha.cursomc.domain.Produto;
 import com.betha.cursomc.repositories.CategoriaRepository;
 import com.betha.cursomc.repositories.ProdutoRepository;
 import com.betha.cursomc.services.exceptions.ObjectNotFoundException;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
+import javax.persistence.EntityManager;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@Transactional
 public class ProdutoService {
     @Autowired
-    ProdutoRepository produtoRepository;
+    private EntityManager entityManager;
     @Autowired
-    CategoriaRepository categoriaRepository;
+    private ProdutoRepository produtoRepository;
+    @Autowired
+    private CategoriaRepository categoriaRepository;
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     public List<Produto> getAll() {
         return produtoRepository.findAll();
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     public Produto getProduto(Integer id) {
-        Optional<Produto> produto = produtoRepository.findById(id);
-
-        return produto.orElseThrow(() -> new ObjectNotFoundException("Produto com id " + id +
-                " não encontrado."));
+        return produtoRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("Produto com id " + id + " não encontrado."));
     }
 
     public Produto saveProduto(Produto produto) {
         produto.setId(null);
 
-        return produtoRepository.save(produto);
+        Produto produtoSalvo = produtoRepository.save(produto);
+        entityManager.flush();
+        entityManager.refresh(produtoSalvo);
+
+        return produtoSalvo;
     }
 
     public Produto editProduto(Integer id, Produto produto) {
-        Optional<Produto> prod = produtoRepository.findById(id);
-
-        if (!prod.isPresent()) {
-            throw new ObjectNotFoundException("Produto com id " + id + " não encontrado.");
-        }
+        Produto prod = this.getProduto(id);
         produto.setId(id);
         return produtoRepository.save(produto);
     }
 
     public Produto deleteProduto(Integer id) {
-        Optional<Produto> possivelProduto = produtoRepository.findById(id);
+        Produto produto = this.getProduto(id);
 
-        if (!possivelProduto.isPresent()) {
-            throw new ObjectNotFoundException("Produto com id " + id + " não encontrado.");
-        }
-        Produto produto = possivelProduto.get();
         produto.setCategorias(Collections.emptyList());
 
         produtoRepository.delete(produto);
         return produto;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public Page<Produto> search(String nome, List<Integer> catIds,
+                                Integer page, Integer linesPerPage, String orderBy, String direction) {
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+
+        List<Categoria> categorias = categoriaRepository.findAllById(catIds);
+
+        return produtoRepository.findDistinctByNomeContainingAndCategoriasIn(nome, categorias, pageRequest);
     }
 }

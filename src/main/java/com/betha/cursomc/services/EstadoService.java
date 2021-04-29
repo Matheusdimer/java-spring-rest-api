@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 public class EstadoService {
     @Autowired
-    EstadoRepository estadoRepository;
+    private EstadoRepository estadoRepository;
 
     public List<Estado> getAll() {
         return estadoRepository.findAll();
