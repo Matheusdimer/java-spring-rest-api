@@ -1,5 +1,7 @@
 package com.betha.cursomc.dto;
 
+import com.betha.cursomc.domain.Pagamento;
+
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -9,8 +11,7 @@ public class PedidoDTO {
     @NotNull
     private Integer endereco;
     @NotNull
-    private Integer pagamento;
-    private Integer parcelas;
+    private Pagamento pagamento;
 
     @NotNull
     private List<ItemPedidoDTO> itens;
@@ -18,7 +19,7 @@ public class PedidoDTO {
     public PedidoDTO() {
     }
 
-    public PedidoDTO(Integer cliente, Integer endereco, Integer pagamento, List<ItemPedidoDTO> itens) {
+    public PedidoDTO(Integer cliente, Integer endereco, Pagamento pagamento, List<ItemPedidoDTO> itens) {
         this.cliente = cliente;
         this.endereco = endereco;
         this.pagamento = pagamento;
@@ -49,19 +50,11 @@ public class PedidoDTO {
         this.endereco = endereco;
     }
 
-    public Integer getPagamento() {
+    public Pagamento getPagamento() {
         return pagamento;
     }
 
-    public void setPagamento(Integer pagamento) {
+    public void setPagamento(Pagamento pagamento) {
         this.pagamento = pagamento;
-    }
-
-    public Integer getParcelas() {
-        return parcelas;
-    }
-
-    public void setParcelas(Integer parcelas) {
-        this.parcelas = parcelas;
     }
 }

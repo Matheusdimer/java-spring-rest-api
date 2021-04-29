@@ -56,17 +56,8 @@ public class PedidoService {
         if (endereco == null) throw new ObjectNotFoundException("Endereco não encontrado");
 
         Pedido pedido = new Pedido(cliente, endereco);
-        Pagamento pagamento;
-
-        if (pedidoDTO.getPagamento() == 1) {
-            pagamento = new PagamentoComBoleto(pedido, LocalDate.now().plusDays(2L), null);
-        } else if (pedidoDTO.getPagamento() == 2) {
-            pagamento = new PagamentoComCartao(pedido, pedidoDTO.getParcelas());
-        } else {
-            throw new ObjectNotFoundException("Tipo de pagamento não reconhecido.");
-        }
-
-        pedido.setPagamento(pagamento);
+        pedido.setPagamento(pedidoDTO.getPagamento());
+        pedido.getPagamento().setPedido(pedido);
 
         for (ItemPedidoDTO item : pedidoDTO.getItens()) {
             Produto produto = produtoService.getProduto(item.getProdutoId());

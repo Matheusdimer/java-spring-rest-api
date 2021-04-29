@@ -1,24 +1,22 @@
 package com.betha.cursomc.domain;
 
-import com.betha.cursomc.domain.enums.EstadoPagamento;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import javax.persistence.Entity;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
+@JsonTypeName("boleto")
 public class PagamentoComBoleto extends Pagamento {
-    private LocalDate dataVencimento;
+    private LocalDate dataVencimento = LocalDate.now().plusDays(3L);
     private LocalDate dataPagamento;
 
     public PagamentoComBoleto() {
 
     }
 
-    public PagamentoComBoleto(Pedido pedido, LocalDate dataVencimento, LocalDate dataPagamento) {
+    public PagamentoComBoleto(Pedido pedido) {
         super(pedido);
-        this.dataVencimento = dataVencimento;
-        this.dataPagamento = dataPagamento;
     }
 
     public LocalDate getDataVencimento() {
