@@ -1,8 +1,6 @@
 package com.betha.cursomc.resources;
 
-import com.betha.cursomc.domain.Categoria;
 import com.betha.cursomc.domain.Produto;
-import com.betha.cursomc.dto.CategoriaDTO;
 import com.betha.cursomc.dto.ProdutoDTO;
 import com.betha.cursomc.resources.utils.URL;
 import com.betha.cursomc.services.ProdutoService;

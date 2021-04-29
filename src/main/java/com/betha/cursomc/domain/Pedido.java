@@ -1,12 +1,6 @@
 package com.betha.cursomc.domain;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.GeneratorType;
-import org.springframework.cglib.core.GeneratorStrategy;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -109,5 +103,23 @@ public class Pedido {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Pedido número: ");
+        sb.append(id);
+        sb.append(", Instante: ").append(this.getInstante());
+        sb.append(", Cliente: ").append(this.getCliente().getNome());
+        sb.append(", Situação do pagamento: ");
+        sb.append(this.getPagamento().getEstadoPagamento().getDescricao());
+        sb.append("\nDetalhes:\n");
+
+        for (ItemPedido item : this.getItens()) {
+            sb.append(item);
+            sb.append("\n");
+        }
+        sb.append("\nValor total: ").append(this.getTotal());
+        return sb.toString();
     }
 }

@@ -5,8 +5,6 @@ import com.betha.cursomc.dto.CategoriaDTO;
 import com.betha.cursomc.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -14,13 +12,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/categorias")
 public class CategoriaResource {
     @Autowired
-    CategoriaService service;
+    private CategoriaService service;
 
     @GetMapping
     public List<CategoriaDTO> listAll() {

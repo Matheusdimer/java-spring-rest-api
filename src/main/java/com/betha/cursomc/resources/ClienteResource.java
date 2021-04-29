@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/clientes")
 public class ClienteResource {
     @Autowired
-    ClienteService clienteService;
+    private ClienteService clienteService;
 
     @GetMapping
     public List<ClienteDTO> getCidades() {

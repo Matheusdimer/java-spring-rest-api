@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -69,6 +68,7 @@ public class PedidoService {
         Pedido novoPedido = pedidoRepository.save(pedido);
         itemPedidoRepository.saveAll(pedido.getItens());
 
+        System.out.println(novoPedido);
         return novoPedido;
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/pedidos")
 public class PedidoResource {
     @Autowired
-    PedidoService pedidoService;
+    private PedidoService pedidoService;
 
     @GetMapping
     public List<Pedido> getPedidos() {

@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,12 +28,6 @@ public class CategoriaService {
 
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<CategoriaDTO> getAll() {
-        /*
-        return entityManager
-                .createNamedQuery("Categoria.findAllView", CategoriaView.class)
-                .getResultList();
-
-        */
         List<Categoria> categorias = repository.findAll();
 
         return categorias.stream()

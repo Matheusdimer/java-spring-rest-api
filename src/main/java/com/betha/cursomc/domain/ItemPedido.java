@@ -84,4 +84,14 @@ public class ItemPedido {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Nome: ");
+        sb.append(this.getProduto().getNome());
+        sb.append(", Desconto: ").append(desconto);
+        sb.append(", Preço unitário: ").append(preco);
+        sb.append(", Quantidade: ").append(quantidade);
+        return sb.toString();
+    }
 }
