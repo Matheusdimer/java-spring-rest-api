@@ -3,8 +3,12 @@ package com.betha.cursomc.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
@@ -107,9 +111,11 @@ public class Pedido {
 
     @Override
     public String toString() {
+        NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm");
         final StringBuffer sb = new StringBuffer("Pedido número: ");
         sb.append(id);
-        sb.append(", Instante: ").append(this.getInstante());
+        sb.append(", Instante: ").append(this.getInstante().format(dtf));
         sb.append(", Cliente: ").append(this.getCliente().getNome());
         sb.append(", Situação do pagamento: ");
         sb.append(this.getPagamento().getEstadoPagamento().getDescricao());
@@ -119,7 +125,7 @@ public class Pedido {
             sb.append(item);
             sb.append("\n");
         }
-        sb.append("\nValor total: ").append(this.getTotal());
+        sb.append("\nValor total: ").append(nf.format(this.getTotal()));
         return sb.toString();
     }
 }

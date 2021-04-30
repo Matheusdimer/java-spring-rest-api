@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.Objects;
 
 @Entity
@@ -87,11 +90,13 @@ public class ItemPedido {
 
     @Override
     public String toString() {
+        NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
         final StringBuffer sb = new StringBuffer("Nome: ");
         sb.append(this.getProduto().getNome());
-        sb.append(", Desconto: ").append(desconto);
-        sb.append(", Preço unitário: ").append(preco);
-        sb.append(", Quantidade: ").append(quantidade);
+        sb.append(", Desconto: ").append(nf.format(this.getDesconto()));
+        sb.append(", Preço unitário: ").append(nf.format(this.getPreco()));
+        sb.append(", Quantidade: ").append(this.getQuantidade());
+        sb.append(", Subtotal: ").append(nf.format(this.getSubtotal()));
         return sb.toString();
     }
 }
