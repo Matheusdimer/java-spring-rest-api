@@ -29,6 +29,9 @@ public class PedidoService {
     @Autowired
     private ItemPedidoRepository itemPedidoRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<Pedido> getAll() {
         return pedidoRepository.findAll();
@@ -68,7 +71,8 @@ public class PedidoService {
         Pedido novoPedido = pedidoRepository.save(pedido);
         itemPedidoRepository.saveAll(pedido.getItens());
 
-        System.out.println(novoPedido);
+        emailService.sendOrderConfirmationEmail(novoPedido);
+
         return novoPedido;
     }
 
