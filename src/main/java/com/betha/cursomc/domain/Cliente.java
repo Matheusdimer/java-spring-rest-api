@@ -1,11 +1,13 @@
 package com.betha.cursomc.domain;
 
+import com.betha.cursomc.domain.enums.Perfil;
 import com.betha.cursomc.domain.enums.TipoCliente;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class Cliente {
@@ -30,20 +32,16 @@ public class Cliente {
     @CollectionTable(name = "telefone")
     private Set<String> telefones = new HashSet<>();
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "perfis")
+    private Set<Integer> perfis = new HashSet<>();
+
 
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos = new ArrayList<>();
 
     public Cliente() {
-
-    }
-
-    public Cliente(String nome, String email, String cpf_cnpj, TipoCliente tipoCliente, String senha) {
-        this.nome = nome;
-        this.email = email;
-        this.cpf_cnpj = cpf_cnpj;
-        this.tipoCliente = tipoCliente.getCod();
-        this.senha = senha;
+        this.addPerfil(Perfil.CLIENTE);
     }
 
     public Cliente(String nome, String email, String cpf_cnpj, Integer tipoCliente, String senha) {
@@ -52,6 +50,7 @@ public class Cliente {
         this.cpf_cnpj = cpf_cnpj;
         this.tipoCliente = tipoCliente;
         this.senha = senha;
+        this.addPerfil(Perfil.CLIENTE);
     }
 
     public String getSenha() {
@@ -60,6 +59,14 @@ public class Cliente {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public Set<Perfil> getPerfis() {
+        return perfis.stream().map(Perfil::toEnum).collect(Collectors.toSet());
+    }
+
+    public void addPerfil(Perfil perfil) {
+        perfis.add(perfil.getCod());
     }
 
     public Integer getId() {
@@ -94,8 +101,8 @@ public class Cliente {
         this.cpf_cnpj = cpf_cnpj;
     }
 
-    public TipoCliente getTipoCliente() {
-        return TipoCliente.toEnum(tipoCliente);
+    public String getTipoCliente() {
+        return TipoCliente.toEnum(tipoCliente).getDescricao();
     }
 
     public void setTipoCliente(Integer tipoCliente) {
