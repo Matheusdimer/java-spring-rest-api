@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,9 @@ public class ClienteService {
 
     @Autowired
     private EnderecoRepository enderecoRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<ClienteDTO> getAll() {
@@ -134,7 +138,8 @@ public class ClienteService {
     }
 
     public Cliente fromDTO(ClienteNewDTO cliDTO) {
-        Cliente cliente = new Cliente(cliDTO.getNome(), cliDTO.getEmail(), cliDTO.getCpf_cnpj(), cliDTO.getTipo());
+        Cliente cliente = new Cliente(cliDTO.getNome(), cliDTO.getEmail(), cliDTO.getCpf_cnpj(),
+                cliDTO.getTipo(), passwordEncoder.encode(cliDTO.getSenha()));
         Cidade cidade = new Cidade(cliDTO.getCidadeId(), null, null);
         Endereco endereco = new Endereco(cliDTO.getLogradouro(), cliDTO.getNumero(),
                 cliDTO.getComplemento(), cliDTO.getBairro(), cliDTO.getCep(), cliente, cidade);

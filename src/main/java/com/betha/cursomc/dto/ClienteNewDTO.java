@@ -18,6 +18,9 @@ public class ClienteNewDTO {
     private String email;
 
     @NotEmpty
+    private String senha;
+
+    @NotEmpty
     private String cpf_cnpj;
     private Integer tipo;
 
@@ -55,6 +58,14 @@ public class ClienteNewDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public String getCpf_cnpj() {

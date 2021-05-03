@@ -1,6 +1,7 @@
 package com.betha.cursomc.domain;
 
 import com.betha.cursomc.domain.enums.TipoCliente;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -18,6 +19,9 @@ public class Cliente {
     private String cpf_cnpj;
     private Integer tipoCliente;
 
+    @JsonIgnore
+    private String senha;
+
     @JsonManagedReference
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Endereco> enderecos = new ArrayList<>();
@@ -34,18 +38,28 @@ public class Cliente {
 
     }
 
-    public Cliente(String nome, String email, String cpf_cnpj, TipoCliente tipoCliente) {
+    public Cliente(String nome, String email, String cpf_cnpj, TipoCliente tipoCliente, String senha) {
         this.nome = nome;
         this.email = email;
         this.cpf_cnpj = cpf_cnpj;
         this.tipoCliente = tipoCliente.getCod();
+        this.senha = senha;
     }
 
-    public Cliente(String nome, String email, String cpf_cnpj, Integer tipoCliente) {
+    public Cliente(String nome, String email, String cpf_cnpj, Integer tipoCliente, String senha) {
         this.nome = nome;
         this.email = email;
         this.cpf_cnpj = cpf_cnpj;
         this.tipoCliente = tipoCliente;
+        this.senha = senha;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public Integer getId() {
