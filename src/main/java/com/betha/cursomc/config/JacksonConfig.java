@@ -18,7 +18,7 @@ public class JacksonConfig {
             public void configure(ObjectMapper objectMapper) {
                 objectMapper.registerSubtypes(PagamentoComCartao.class);
                 objectMapper.registerSubtypes(PagamentoComBoleto.class);
-                SimpleDateFormat format = new SimpleDateFormat("aaaa-MM-dd'T'hh:mm:ss.SSS");
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
                 objectMapper.setDateFormat(format);
                 super.configure(objectMapper);
             }
