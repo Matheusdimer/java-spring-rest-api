@@ -9,7 +9,7 @@ public class CategoriaDTO {
     private Integer id;
 
     @NotEmpty
-    @Length(min = 5, max = 80)
+    @Length(min = 5, max = 80, message = "Tamanho inválido")
     private String nome;
 
     public CategoriaDTO() {
