@@ -1,4 +1,4 @@
-package com.betha.cursomc.dto;
+package com.betha.cursomc.domain.dto;
 
 import com.betha.cursomc.services.validation.ClienteInsert;
 import org.hibernate.validator.constraints.Length;

@@ -2,8 +2,8 @@ package com.betha.cursomc.resources;
 
 import com.betha.cursomc.domain.Cliente;
 import com.betha.cursomc.domain.Endereco;
-import com.betha.cursomc.dto.ClienteDTO;
-import com.betha.cursomc.dto.ClienteNewDTO;
+import com.betha.cursomc.domain.dto.ClienteDTO;
+import com.betha.cursomc.domain.dto.ClienteNewDTO;
 import com.betha.cursomc.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

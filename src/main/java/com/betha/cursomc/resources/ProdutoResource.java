@@ -1,7 +1,7 @@
 package com.betha.cursomc.resources;
 
 import com.betha.cursomc.domain.Produto;
-import com.betha.cursomc.dto.ProdutoDTO;
+import com.betha.cursomc.domain.dto.ProdutoDTO;
 import com.betha.cursomc.resources.utils.URL;
 import com.betha.cursomc.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;

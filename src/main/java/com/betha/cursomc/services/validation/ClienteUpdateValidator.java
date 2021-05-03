@@ -1,12 +1,9 @@
 package com.betha.cursomc.services.validation;
 
 import com.betha.cursomc.domain.Cliente;
-import com.betha.cursomc.domain.enums.TipoCliente;
-import com.betha.cursomc.dto.ClienteDTO;
-import com.betha.cursomc.dto.ClienteNewDTO;
+import com.betha.cursomc.domain.dto.ClienteDTO;
 import com.betha.cursomc.repositories.ClienteRepository;
 import com.betha.cursomc.resources.exceptions.FieldMessage;
-import com.betha.cursomc.services.validation.utils.BR;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerMapping;
 

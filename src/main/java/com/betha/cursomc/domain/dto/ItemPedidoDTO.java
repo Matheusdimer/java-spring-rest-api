@@ -1,4 +1,4 @@
-package com.betha.cursomc.dto;
+package com.betha.cursomc.domain.dto;
 
 public class ItemPedidoDTO {
     private Integer produtoId;

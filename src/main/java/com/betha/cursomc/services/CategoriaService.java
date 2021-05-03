@@ -1,7 +1,7 @@
 package com.betha.cursomc.services;
 
 import com.betha.cursomc.domain.Categoria;
-import com.betha.cursomc.dto.CategoriaDTO;
+import com.betha.cursomc.domain.dto.CategoriaDTO;
 import com.betha.cursomc.repositories.CategoriaRepository;
 import com.betha.cursomc.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package com.betha.cursomc.services;
 
 import com.betha.cursomc.domain.*;
-import com.betha.cursomc.dto.ItemPedidoDTO;
-import com.betha.cursomc.dto.PedidoDTO;
+import com.betha.cursomc.domain.dto.ItemPedidoDTO;
+import com.betha.cursomc.domain.dto.PedidoDTO;
 import com.betha.cursomc.repositories.ClienteRepository;
 import com.betha.cursomc.repositories.ItemPedidoRepository;
 import com.betha.cursomc.repositories.PedidoRepository;

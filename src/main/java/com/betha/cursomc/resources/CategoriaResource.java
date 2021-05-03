@@ -1,7 +1,7 @@
 package com.betha.cursomc.resources;
 
 import com.betha.cursomc.domain.Categoria;
-import com.betha.cursomc.dto.CategoriaDTO;
+import com.betha.cursomc.domain.dto.CategoriaDTO;
 import com.betha.cursomc.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

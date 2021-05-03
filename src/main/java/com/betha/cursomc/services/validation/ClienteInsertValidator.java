@@ -2,7 +2,7 @@ package com.betha.cursomc.services.validation;
 
 import com.betha.cursomc.domain.Cliente;
 import com.betha.cursomc.domain.enums.TipoCliente;
-import com.betha.cursomc.dto.ClienteNewDTO;
+import com.betha.cursomc.domain.dto.ClienteNewDTO;
 import com.betha.cursomc.repositories.ClienteRepository;
 import com.betha.cursomc.resources.exceptions.FieldMessage;
 import com.betha.cursomc.services.validation.utils.BR;

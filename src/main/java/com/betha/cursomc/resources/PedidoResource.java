@@ -1,6 +1,6 @@
 package com.betha.cursomc.resources;
 
-import com.betha.cursomc.dto.PedidoDTO;
+import com.betha.cursomc.domain.dto.PedidoDTO;
 import com.betha.cursomc.domain.Pedido;
 import com.betha.cursomc.services.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
