@@ -2,6 +2,7 @@ package com.betha.cursomc.config;
 
 import com.betha.cursomc.security.JWTAuthenticationFailureHandler;
 import com.betha.cursomc.security.JWTAuthenticationFilter;
+import com.betha.cursomc.security.JWTAuthorizationFilter;
 import com.betha.cursomc.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -45,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
                 .anyRequest().authenticated();
         http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+        http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
