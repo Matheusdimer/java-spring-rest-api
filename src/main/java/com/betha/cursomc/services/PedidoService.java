@@ -71,7 +71,7 @@ public class PedidoService {
         Pedido novoPedido = pedidoRepository.save(pedido);
         itemPedidoRepository.saveAll(pedido.getItens());
 
-        emailService.sendOrderConfirmationEmail(novoPedido);
+        emailService.sendOrderConfirmationHtmlEmail(novoPedido);
 
         return novoPedido;
     }

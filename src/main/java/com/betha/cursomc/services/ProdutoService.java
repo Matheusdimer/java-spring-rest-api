@@ -27,6 +27,9 @@ public class ProdutoService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
+    public ProdutoService() {
+    }
+
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<Produto> getAll() {
         return produtoRepository.findAll();
