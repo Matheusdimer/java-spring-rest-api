@@ -5,9 +5,13 @@ import com.betha.cursomc.domain.Cliente;
 import com.betha.cursomc.domain.Endereco;
 import com.betha.cursomc.domain.dto.ClienteDTO;
 import com.betha.cursomc.domain.dto.ClienteNewDTO;
+import com.betha.cursomc.domain.enums.Perfil;
 import com.betha.cursomc.repositories.ClienteRepository;
 import com.betha.cursomc.repositories.EnderecoRepository;
+import com.betha.cursomc.security.UserSS;
+import com.betha.cursomc.services.exceptions.AuthorizationException;
 import com.betha.cursomc.services.exceptions.ObjectNotFoundException;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,6 +49,12 @@ public class ClienteService {
 
     @Transactional(propagation = Propagation.SUPPORTS)
     public Cliente getOne(Integer id) {
+        UserSS user = UserService.authenticated();
+
+        if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+            throw new AuthorizationException("Acesso negado");
+        }
+
         return clienteRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("Cliente id " + id + " não encontrado."));
     }
