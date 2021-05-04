@@ -6,8 +6,13 @@ import com.betha.cursomc.domain.dto.PedidoDTO;
 import com.betha.cursomc.repositories.ClienteRepository;
 import com.betha.cursomc.repositories.ItemPedidoRepository;
 import com.betha.cursomc.repositories.PedidoRepository;
+import com.betha.cursomc.security.UserSS;
+import com.betha.cursomc.services.exceptions.AuthorizationException;
 import com.betha.cursomc.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +26,7 @@ public class PedidoService {
     private PedidoRepository pedidoRepository;
 
     @Autowired
-    private ClienteRepository clienteRepository;
+    private ClienteService clienteService;
 
     @Autowired
     private ProdutoService produtoService;
@@ -43,10 +48,23 @@ public class PedidoService {
                 .orElseThrow(() -> new ObjectNotFoundException("Pedido id " + id + " não encontrado"));
     }
 
+    public Page<Pedido> findPedidosCliente(Integer page, Integer linesPerPage, String orderBy, String direction) {
+        UserSS user = UserService.authenticated();
+
+        if (user == null) {
+            throw new AuthorizationException("Acesso negado");
+        }
+
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+
+        Cliente cliente = clienteService.getOne(user.getId());
+
+        return pedidoRepository.findByCliente(cliente, pageRequest);
+    }
+
     public Pedido add(PedidoDTO pedidoDTO) {
         Integer clienteId = pedidoDTO.getCliente();
-        Cliente cliente = clienteRepository.findById(clienteId)
-                .orElseThrow(() -> new ObjectNotFoundException("Cliente id " + clienteId + " não encontrado"));
+        Cliente cliente = clienteService.getOne(clienteId);
 
         Endereco endereco = null;
         for (Endereco end : cliente.getEnderecos()) {
