@@ -7,6 +7,7 @@ import com.betha.cursomc.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -44,6 +45,7 @@ public class ProdutoResource {
                 .map(ProdutoDTO::new);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Produto> addProduto(@RequestBody Produto produto) {
         produto = service.saveProduto(produto);
@@ -51,6 +53,7 @@ public class ProdutoResource {
         return ResponseEntity.created(URI.create("/produtos/" + produto.getId())).body(produto);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Produto> editProduto(@PathVariable Integer id, @RequestBody Produto produto) {
         produto = service.editProduto(id, produto);
@@ -58,6 +61,7 @@ public class ProdutoResource {
         return ResponseEntity.ok(produto);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Produto> removeProduto(@PathVariable Integer id) {
         Produto produto = service.deleteProduto(id);

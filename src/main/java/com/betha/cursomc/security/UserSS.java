@@ -24,7 +24,8 @@ public class UserSS implements UserDetails {
         this.email = email;
         this.senha = senha;
         this.authorities = perfis.stream()
-                .map(x -> new SimpleGrantedAuthority(x.getDescricao())).collect(Collectors.toList());
+                .map(x -> new SimpleGrantedAuthority(x.getDescricao()))
+                .collect(Collectors.toList());
     }
 
     @Override

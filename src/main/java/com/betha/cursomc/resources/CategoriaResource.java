@@ -6,6 +6,7 @@ import com.betha.cursomc.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -39,6 +40,7 @@ public class CategoriaResource {
         return service.getCategoria(id);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Categoria> addCategoria(@Valid @RequestBody CategoriaDTO cat) {
         Categoria categoria = service.fromDTO(cat);
@@ -48,12 +50,14 @@ public class CategoriaResource {
         return ResponseEntity.created(uri).body(categoriaSalva);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("/{id}")
     public Categoria editCategoria(@PathVariable Integer id, @RequestBody @Valid CategoriaDTO catDTO) {
         Categoria categoria = service.fromDTO(catDTO);
         return service.editCategoria(id, categoria);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/{id}")
     public Categoria removeCategoria(@PathVariable Integer id) {
         return service.deleteCategoria(id);

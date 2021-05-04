@@ -7,6 +7,7 @@ import com.betha.cursomc.domain.dto.ClienteNewDTO;
 import com.betha.cursomc.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,6 +20,7 @@ public class ClienteResource {
     @Autowired
     private ClienteService clienteService;
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping
     public List<ClienteDTO> getCidades() {
         return clienteService.getAll();
@@ -41,6 +43,7 @@ public class ClienteResource {
         return clienteService.edit(id, cliente);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/{id}")
     public Cliente deleteCliente(@PathVariable Integer id) {
         return clienteService.delete(id);
