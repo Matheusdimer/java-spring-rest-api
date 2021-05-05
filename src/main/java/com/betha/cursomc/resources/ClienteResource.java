@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -69,5 +70,12 @@ public class ClienteResource {
     @DeleteMapping("/{clienteId}/enderecos/{enderecoId}")
     public Endereco removeEndereco(@PathVariable Integer clienteId, @PathVariable Integer enderecoId) {
         return clienteService.removeEndereco(clienteId, enderecoId);
+    }
+
+    @PostMapping("/picture")
+    public ResponseEntity<Void> uploadProfilePicture(@RequestParam(name = "file") MultipartFile file) {
+        URI uri = clienteService.uploadProfilePicture(file);
+
+        return ResponseEntity.created(uri).build();
     }
 }
