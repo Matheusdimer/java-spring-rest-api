@@ -11,7 +11,6 @@ import com.betha.cursomc.repositories.EnderecoRepository;
 import com.betha.cursomc.security.UserSS;
 import com.betha.cursomc.services.exceptions.AuthorizationException;
 import com.betha.cursomc.services.exceptions.ObjectNotFoundException;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -57,6 +56,9 @@ public class ClienteService {
 
     @Value("${img.prefix.client.profile}")
     private String imgPrefix;
+
+    @Value("${img.profile.size}")
+    private Integer imageSize;
 
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<ClienteDTO> getAll() {
@@ -127,7 +129,7 @@ public class ClienteService {
 
     public Endereco editEndereco(Integer clienteId, Integer enderecoId, Endereco endereco) {
         Cliente cliente = this.getOne(clienteId);
-        Endereco enderecoSalvo = enderecoRepository.findById(enderecoId)
+        enderecoRepository.findById(enderecoId)
                 .orElseThrow(() -> new ObjectNotFoundException("Endereco relacionado ao cliente id " + clienteId + " não encontrado."));
 
         endereco.setId(enderecoId);
@@ -198,6 +200,9 @@ public class ClienteService {
 
         BufferedImage img = imageService.getJpgImageFromFile(multipartFile);
         String fileName = imgPrefix + user.getId() + ".jpg";
+
+        img = imageService.cropSquare(img);
+        img = imageService.resize(img, imageSize);
 
         ByteArrayOutputStream file = imageService.getOutputStream(img, "jpg");
         Long fileSize = (long) file.size();

@@ -2,16 +2,15 @@ package com.betha.cursomc.services;
 
 import com.betha.cursomc.services.exceptions.FileException;
 import org.apache.commons.io.FileUtils;
+import org.imgscalr.Scalr;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Objects;
 
 @Service
@@ -49,5 +48,21 @@ public class ImageService {
             throw new FileException("Erro ao ler arquivo");
         }
         return os;
+    }
+
+    public BufferedImage cropSquare(BufferedImage sourceImg) {
+        int min = Math.min(sourceImg.getHeight(), sourceImg.getWidth());
+
+        return Scalr.crop(
+                sourceImg,
+                (sourceImg.getWidth() / 2) - (min / 2),
+                (sourceImg.getHeight() / 2) - (min / 2),
+                min,
+                min
+        );
+    }
+
+    public BufferedImage resize(BufferedImage sourceImg, Integer imageSize) {
+        return Scalr.resize(sourceImg, Scalr.Method.ULTRA_QUALITY, imageSize);
     }
 }
