@@ -13,6 +13,7 @@ import com.betha.cursomc.services.exceptions.AuthorizationException;
 import com.betha.cursomc.services.exceptions.ObjectNotFoundException;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -23,6 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
@@ -46,6 +51,12 @@ public class ClienteService {
 
     @Autowired
     private S3Service s3Service;
+
+    @Autowired
+    private ImageService imageService;
+
+    @Value("${img.prefix.client.profile}")
+    private String imgPrefix;
 
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<ClienteDTO> getAll() {
@@ -185,12 +196,14 @@ public class ClienteService {
             throw new AuthorizationException("Acesso negado");
         }
 
-        URI uri = s3Service.uploadFile(multipartFile);
+        BufferedImage img = imageService.getJpgImageFromFile(multipartFile);
+        String fileName = imgPrefix + user.getId() + ".jpg";
 
-        Cliente cliente = this.getOne(user.getId());
-        cliente.setImageUrl(uri.toString());
-        clienteRepository.save(cliente);
-        
-        return uri;
+        ByteArrayOutputStream file = imageService.getOutputStream(img, "jpg");
+        Long fileSize = (long) file.size();
+
+        InputStream inputStream = new ByteArrayInputStream(file.toByteArray());
+
+        return s3Service.uploadFile(inputStream, fileName, "image", fileSize);
     }
 }
