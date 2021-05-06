@@ -181,7 +181,7 @@ public class ClienteService {
     public URI uploadProfilePicture(MultipartFile multipartFile) {
         UserSS user = UserService.authenticated();
 
-        if (user != null) {
+        if (user == null) {
             throw new AuthorizationException("Acesso negado");
         }
 
