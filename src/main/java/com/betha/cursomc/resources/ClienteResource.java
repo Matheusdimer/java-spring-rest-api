@@ -32,6 +32,11 @@ public class ClienteResource {
         return clienteService.getOne(id);
     }
 
+    @GetMapping("/email")
+    public Cliente getClienteByEmail(@RequestParam(value = "value") String email) {
+        return clienteService.getByEmail(email);
+    }
+
     @PostMapping
     public ResponseEntity<Cliente> addCliente(@Valid @RequestBody ClienteNewDTO clienteNovo) {
         Cliente cliente = clienteService.add(clienteNovo);

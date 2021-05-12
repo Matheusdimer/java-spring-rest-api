@@ -2,6 +2,7 @@ package com.betha.cursomc.services;
 
 import com.betha.cursomc.domain.Cidade;
 import com.betha.cursomc.domain.Estado;
+import com.betha.cursomc.repositories.CidadeRepository;
 import com.betha.cursomc.repositories.EstadoRepository;
 import com.betha.cursomc.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ import java.util.Optional;
 public class EstadoService {
     @Autowired
     private EstadoRepository estadoRepository;
+
+    @Autowired
+    private CidadeRepository cidadeRepository;
 
     public List<Estado> getAll() {
         return estadoRepository.findAll();
@@ -34,25 +38,33 @@ public class EstadoService {
     }
 
     public Estado edit(Integer id, Estado estado) {
-        Optional<Estado> prod = estadoRepository.findById(id);
+        Optional<Estado> est = estadoRepository.findById(id);
 
-        if (!prod.isPresent()) {
-            throw new ObjectNotFoundException("Cidade com id " + id + " não encontrado.");
+        if (!est.isPresent()) {
+            throw new ObjectNotFoundException("Estado com id " + id + " não encontrado.");
         }
         estado.setId(id);
         return estadoRepository.save(estado);
     }
 
     public Estado delete(Integer id) {
-        Optional<Estado> possivelEstado = estadoRepository.findById(id);
+        Estado estado = estadoRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("Estado com id " + id + " não encontrado."));
 
-        if (!possivelEstado.isPresent()) {
-            throw new ObjectNotFoundException("Produto com id " + id + " não encontrado.");
-        }
-        Estado estado = possivelEstado.get();
         estado.setCidades(Collections.emptyList());
 
         estadoRepository.delete(estado);
         return estado;
+    }
+
+    public List<Cidade> getCidades(Integer estadoId) {
+        return cidadeRepository.findAllByEstadoId(estadoId);
+    }
+
+    public Cidade addCidade(Integer estadoId, Cidade cidade) {
+        Estado estado = this.getOne(estadoId);
+
+        cidade.setEstado(estado);
+        return cidadeRepository.save(cidade);
     }
 }

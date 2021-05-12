@@ -77,6 +77,18 @@ public class ClienteService {
                 .orElseThrow(() -> new ObjectNotFoundException("Cliente id " + id + " não encontrado."));
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public Cliente getByEmail(String email) {
+        UserSS user = UserService.authenticated();
+
+        if (user == null || !user.hasRole(Perfil.ADMIN) && !user.getUsername().equals(email)) {
+            throw new AuthorizationException("Acesso negado");
+        }
+
+        return clienteRepository.findByEmail(email)
+                .orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado"));
+    }
+
     public Cliente add(ClienteNewDTO clienteDTO) {
         Cliente cliente = this.fromDTO(clienteDTO);
         enderecoRepository.saveAll(cliente.getEnderecos());

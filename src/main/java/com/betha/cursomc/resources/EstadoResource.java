@@ -1,5 +1,6 @@
 package com.betha.cursomc.resources;
 
+import com.betha.cursomc.domain.Cidade;
 import com.betha.cursomc.domain.Estado;
 import com.betha.cursomc.services.EstadoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +47,15 @@ public class EstadoResource {
         Estado estado = estadoService.delete(id);
 
         return ResponseEntity.ok(estado);
+    }
+
+    @GetMapping("/{estadoId}/cidades")
+    public List<Cidade> getCidades(@PathVariable Integer estadoId) {
+        return estadoService.getCidades(estadoId);
+    }
+
+    @PostMapping("/{estadoId}/cidades")
+    public Cidade addCidade(@PathVariable Integer estadoId, @RequestBody Cidade cidade) {
+        return estadoService.addCidade(estadoId, cidade);
     }
 }
