@@ -25,10 +25,8 @@ public class EstadoService {
     }
 
     public Estado getOne(Integer id) {
-        Optional<Estado> produto = estadoRepository.findById(id);
-
-        return produto.orElseThrow(() -> new ObjectNotFoundException("Cidade com id " + id +
-                " não encontrado."));
+        return estadoRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("Estado com id " + id + " não encontrado."));
     }
 
     public Estado save(Estado estado) {
@@ -38,18 +36,13 @@ public class EstadoService {
     }
 
     public Estado edit(Integer id, Estado estado) {
-        Optional<Estado> est = estadoRepository.findById(id);
-
-        if (!est.isPresent()) {
-            throw new ObjectNotFoundException("Estado com id " + id + " não encontrado.");
-        }
+        this.getOne(id);
         estado.setId(id);
         return estadoRepository.save(estado);
     }
 
     public Estado delete(Integer id) {
-        Estado estado = estadoRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("Estado com id " + id + " não encontrado."));
+        Estado estado = this.getOne(id);
 
         estado.setCidades(Collections.emptyList());
 

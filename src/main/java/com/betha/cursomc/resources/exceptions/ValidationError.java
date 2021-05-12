@@ -6,8 +6,8 @@ import java.util.List;
 public class ValidationError extends StandardError {
     private List<FieldMessage> errors = new ArrayList<>();
 
-    public ValidationError(Integer status, String message, Long timestamp) {
-        super(status, message, timestamp);
+    public ValidationError(Long timestamp, Integer status, String error, String message, String path) {
+        super(timestamp, status, error, message, path);
     }
 
     public List<FieldMessage> getErrors() {
