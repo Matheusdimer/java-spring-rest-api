@@ -23,7 +23,7 @@ public class ClienteResource {
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping
-    public List<ClienteDTO> getCidades() {
+    public List<ClienteDTO> getClientes() {
         return clienteService.getAll();
     }
 
